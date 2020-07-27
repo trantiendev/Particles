@@ -1,35 +1,67 @@
 import p5 from 'p5'
 
+// Define constant
+const MAX_SIZE = 70
+const MIN_SIZE = 30
+
 let canvas
 let particlesPosition = []
 let imagesBubble = []
 
 export default class Particles extends p5 {
 
+  // TODO: refactor variable
   constructor(sketch = ()=>{}, node = false, sync = false) {
     super(sketch, node, sync)
-    // Size
-    this.size = 30
+
+    this.toggleRotation = true
+    this.particlesLength = 0;
     this.setup = this.setup.bind(this)
     this.draw = this.draw.bind(this)
     this.preload = this.preload.bind(this)
+    this.removeParticle = this.removeParticle.bind(this)
+    this.addParticle = this.addParticle.bind(this)
     this.windowResized = this.windowResized.bind(this)
   }
 
   setup() {
     canvas = this.createCanvas(window.innerWidth, document.body.offsetHeight)
-    this.particlesLength = Math.floor(this.width / 50)
     this.pos = []
     this.vel = []
     this.randomSize = []
 
-    for (let i = 0; i < this.particlesLength; i++) {
-      this.pos[i] = this.createVector(this.random(this.width), this.random(this.height))
-      this.vel[i] = this.createVector(this.random(-2,2), this.random(-2,2))
-      this.randomSize[i] = this.random(50, 100)
-      this.randomImg = Math.floor(this.random(1, 7))
-      particlesPosition.push(this.pos[i])
+    // Init particles
+    while (this.particlesLength <= Math.floor(this.width / 50)) {
+      this.addParticle()
     }
+
+    // Start rotation to add & remove particle
+    setInterval(() => {
+      if (this.particlesLength == MAX_SIZE) this.toggleRotation = false
+      if (this.particlesLength == MIN_SIZE) this.toggleRotation = true
+      if (this.toggleRotation) {
+        this.addParticle()
+      } else {
+        this.removeParticle()
+      }
+    }, 1000);
+  }
+
+  addParticle() {
+    this.particlesLength++
+    this.pos.push(this.createVector(this.random(this.width), this.random(this.height)))
+    this.vel.push(this.createVector(this.random(-2,2), this.random(-2,2)))
+    this.randomSize.push(this.random(50, 100))
+    this.randomImg = Math.floor(this.random(1, 7))
+    particlesPosition.push(this.pos[this.pos.length - 1])
+  }
+
+  removeParticle() {
+    this.particlesLength--
+    this.pos.pop()
+    this.vel.pop()
+    this.randomSize.pop()
+    particlesPosition.pop()
   }
 
   windowResized() {
