@@ -1,5 +1,6 @@
 import p5 from 'p5'
 
+let canvas
 let particlesPosition = []
 let imagesBubble = []
 
@@ -12,11 +13,12 @@ export default class Particles extends p5 {
     this.setup = this.setup.bind(this)
     this.draw = this.draw.bind(this)
     this.preload = this.preload.bind(this)
+    this.windowResized = this.windowResized.bind(this)
   }
 
   setup() {
-    this.createCanvas(this.windowWidth, this.windowHeight)
-    this.particlesLength = Math.floor(this.width / 90)
+    canvas = this.createCanvas(window.innerWidth, document.body.offsetHeight)
+    this.particlesLength = Math.floor(this.width / 50)
     this.pos = []
     this.vel = []
     this.randomSize = []
@@ -30,13 +32,17 @@ export default class Particles extends p5 {
     }
   }
 
+  windowResized() {
+    this.resizeCanvas(window.innerWidth, document.body.offsetHeight)
+  }
+
   update(postition, velocity) {
     postition.add(velocity)
     this.edges(postition, velocity)
   }
 
   draw() {
-    this.background('rgba(255, 255, 255, 1)')
+    this.background('rgba(0, 0, 0, .7)')
     this.render()
   }
 
@@ -46,7 +52,7 @@ export default class Particles extends p5 {
     for (let i = 0; i < this.particlesLength; i++) {
       counter++
       if (counter > imagesBubble.length) counter = 1
-      
+
       this.update(this.pos[i], this.vel[i])
       this.connectParticles(this.pos[i], particlesPosition.slice(i + 1))
       this.imageMode(this.CENTER)
@@ -62,7 +68,7 @@ export default class Particles extends p5 {
 
   edges(postition, velocity) {
     if(postition.x < 0 || postition.x > this.windowWidth) velocity.x *= -1
-    if(postition.y < 0 || postition.y > this.windowHeight) velocity.y *= -1
+    if(postition.y < 0 || postition.y > document.body.offsetHeight) velocity.y *= -1
   }
 
   connectParticles(position, particles) {
@@ -70,9 +76,7 @@ export default class Particles extends p5 {
       const distance = this.dist(position.x, position.y, particle.x,particle.y)
 
       if (distance < 200) {
-				const alpha = this.map(distance, 0, 120, 0, 0.25)
-
-        this.stroke(`rgba(0, 0, 0, ${alpha})`)
+        this.stroke(`rgba(255, 255, 255, 0.5)`)
         this.line(position.x, position.y, particle.x,particle.y)
       }
     })
