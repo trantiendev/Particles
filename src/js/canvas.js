@@ -19,8 +19,6 @@ export default class Particles extends p5 {
     this.setup = this.setup.bind(this)
     this.draw = this.draw.bind(this)
     this.preload = this.preload.bind(this)
-    this.removeParticle = this.removeParticle.bind(this)
-    this.addParticle = this.addParticle.bind(this)
     this.windowResized = this.windowResized.bind(this)
   }
 
@@ -39,11 +37,7 @@ export default class Particles extends p5 {
     setInterval(() => {
       if (this.particlesLength == MAX_SIZE) this.toggleRotation = false
       if (this.particlesLength == MIN_SIZE) this.toggleRotation = true
-      if (this.toggleRotation) {
-        this.addParticle()
-      } else {
-        this.removeParticle()
-      }
+      (this.toggleRotation) ? this.addParticle() : this.removeParticle()
     }, 1000);
   }
 
