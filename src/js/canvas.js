@@ -1,9 +1,9 @@
 import p5 from 'p5'
 
-// Define constant
-const MAX_SIZE = 70
-const MIN_SIZE = 30
-
+//Define constant
+const containerElement = document.querySelector('body');
+const MAX_SIZE = 40
+const MIN_SIZE = 20
 let canvas
 let particlesPosition = []
 let imagesBubble = []
@@ -11,9 +11,10 @@ let imagesBubble = []
 export default class Particles extends p5 {
 
   // TODO: refactor variable
-  constructor(sketch = ()=>{}, node = false, sync = false) {
+  constructor(sketch = ()=>{}, node = containerElement, sync = false) {
     super(sketch, node, sync)
 
+    this.parallaxDelta = 0
     this.toggleRotation = true
     this.particlesLength = 0;
     this.setup = this.setup.bind(this)
@@ -24,6 +25,7 @@ export default class Particles extends p5 {
 
   setup() {
     canvas = this.createCanvas(window.innerWidth, document.body.offsetHeight)
+    canvas.style('z-index', '-1')
     this.pos = []
     this.vel = []
     this.randomSize = []
@@ -37,14 +39,14 @@ export default class Particles extends p5 {
     setInterval(() => {
       if (this.particlesLength == MAX_SIZE) this.toggleRotation = false
       if (this.particlesLength == MIN_SIZE) this.toggleRotation = true
-      (this.toggleRotation) ? this.addParticle() : this.removeParticle()
+      this.toggleRotation ? this.addParticle() : this.removeParticle()
     }, 1000);
   }
 
   addParticle() {
     this.particlesLength++
     this.pos.push(this.createVector(this.random(this.width), this.random(this.height)))
-    this.vel.push(this.createVector(this.random(-2,2), this.random(-2,2)))
+    this.vel.push(this.createVector(this.random(-1,1), this.random(-1,1)))
     this.randomSize.push(this.random(50, 100))
     this.randomImg = Math.floor(this.random(1, 7))
     particlesPosition.push(this.pos[this.pos.length - 1])
