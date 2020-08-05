@@ -16,3 +16,19 @@ export const player = () => {
     song.paused ? song.play() : song.pause()
   })
 }
+
+export const text = () => {
+  const headline = document.querySelector("h1")
+
+  const string = headline.innerText
+
+  headline.dataset.text = string.length
+  let spaned = ''
+  for (let i = 0; i < string.length; i++) {
+    spaned += (string.substring(i, i + 1) === ' ')
+      ? string.substring(i, i + 1)
+      : `<span style="animation-delay: ${(i + 1) * .05}s">${string.substring(i, i + 1)}</span>`
+    }
+
+    headline.innerHTML = spaned
+}
