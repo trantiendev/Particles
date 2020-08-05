@@ -9,7 +9,6 @@ let particlesPosition = []
 let imagesBubble = []
 
 export default class Particles extends p5 {
-
   // TODO: refactor variable
   constructor(sketch = ()=>{}, node = containerElement, sync = false) {
     super(sketch, node, sync)
@@ -19,7 +18,7 @@ export default class Particles extends p5 {
     this.particlesLength = 0;
     this.setup = this.setup.bind(this)
     this.draw = this.draw.bind(this)
-    this.preload = this.preload.bind(this)
+    // this.preload = this.preload.bind(this)
     this.windowResized = this.windowResized.bind(this)
   }
 
@@ -29,6 +28,8 @@ export default class Particles extends p5 {
     this.pos = []
     this.vel = []
     this.randomSize = []
+    // this.colorMode(this.HSB, 100)
+    this.blendMode(this.ADD)
 
     // Init particles
     while (this.particlesLength <= Math.floor(this.width / 50)) {
@@ -47,7 +48,7 @@ export default class Particles extends p5 {
     this.particlesLength++
     this.pos.push(this.createVector(this.random(this.width), this.random(this.height)))
     this.vel.push(this.createVector(this.random(-1,1), this.random(-1,1)))
-    this.randomSize.push(this.random(50, 100))
+    this.randomSize.push(this.random(30, 100))
     this.randomImg = Math.floor(this.random(1, 7))
     particlesPosition.push(this.pos[this.pos.length - 1])
   }
@@ -70,29 +71,40 @@ export default class Particles extends p5 {
   }
 
   draw() {
-    this.background('rgba(0, 0, 0, .7)')
+    this.clear()
+    this.background('rgba(0, 0, 0, 0.9)')
     this.render()
   }
 
   render() {
     let counter = 0
+    this.noStroke()
+    this.fill('rgba(255, 255, 255, .1)')
 
-    for (let i = 0; i < this.particlesLength; i++) {
+    for(let i = 0; i < this.particlesLength; i++) {
       counter++
       if (counter > imagesBubble.length) counter = 1
 
       this.update(this.pos[i], this.vel[i])
       this.connectParticles(this.pos[i], particlesPosition.slice(i + 1))
-      this.imageMode(this.CENTER)
-      this.image(imagesBubble[counter - 1], this.pos[i].x, this.pos[i].y, this.randomSize[i], this.randomSize[i])
+      this.circle(this.pos[i].x, this.pos[i].y, this.randomSize[i], this.randomSize[i])
+      this.circle(this.pos[i].x + 3, this.pos[i].y + 3, this.randomSize[i]/1.1, this.randomSize[i])
+      this.circle(this.pos[i].x - 3, this.pos[i].y - 3, this.randomSize[i], this.randomSize[i])
+      this.circle(this.pos[i].x, this.pos[i].y - 3, this.randomSize[i], this.randomSize[i])
+      this.circle(this.pos[i].x - 3, this.pos[i].y, this.randomSize[i], this.randomSize[i])
+
+      // this.imageMode(this.CENTER)
+      // this.image(imagesBubble[counter - 1], this.pos[i].x, this.pos[i].y, this.randomSize[i], this.randomSize[i])
     }
+    // this.blendMode(this.NORMAL)
+
   }
 
-  preload() {
-    for (let i = 0; i < 7; i++) {
-      imagesBubble[i] = this.loadImage(`images/${i + 1}.png`)
-    }
-  }
+  // preload() {
+  //   for (let i = 0; i < 7; i++) {
+  //     imagesBubble[i] = this.loadImage(`images/${i + 1}.png`)
+  //   }
+  // }
 
   edges(postition, velocity) {
     if(postition.x < 0 || postition.x > this.windowWidth) velocity.x *= -1
