@@ -29,7 +29,7 @@ export default class Particles extends p5 {
     this.vel = []
     this.randomSize = []
     // this.colorMode(this.HSB, 100)
-    this.blendMode(this.ADD)
+    // this.blendMode(this.ADD)
 
     // Init particles
     while (this.particlesLength <= Math.floor(this.width / 50)) {
@@ -72,26 +72,28 @@ export default class Particles extends p5 {
 
   draw() {
     this.clear()
-    this.background('rgba(0, 0, 0, 0.9)')
+    this.background('rgba(0, 0, 0, 1)')
     this.render()
   }
 
   render() {
     let counter = 0
-    this.noStroke()
-    this.fill('rgba(255, 255, 255, .1)')
+    this.fill('rgba(25, 181, 254, .5)')
+    this.drawingContext.shadowBlur = 200
+    this.drawingContext.shadowColor = 'rgba(25, 181, 254, .5)'
 
     for(let i = 0; i < this.particlesLength; i++) {
       counter++
       if (counter > imagesBubble.length) counter = 1
+      // this.noStroke()
 
       this.update(this.pos[i], this.vel[i])
       this.connectParticles(this.pos[i], particlesPosition.slice(i + 1))
-      this.circle(this.pos[i].x, this.pos[i].y, this.randomSize[i], this.randomSize[i])
-      this.circle(this.pos[i].x + 3, this.pos[i].y + 3, this.randomSize[i]/1.1, this.randomSize[i])
-      this.circle(this.pos[i].x - 3, this.pos[i].y - 3, this.randomSize[i], this.randomSize[i])
-      this.circle(this.pos[i].x, this.pos[i].y - 3, this.randomSize[i], this.randomSize[i])
-      this.circle(this.pos[i].x - 3, this.pos[i].y, this.randomSize[i], this.randomSize[i])
+      this.circle(this.pos[i].x, this.pos[i].y, this.randomSize[i])
+      this.circle(this.pos[i].x + 3, this.pos[i].y + 3, this.randomSize[i]/1.1)
+      this.circle(this.pos[i].x - 3, this.pos[i].y - 3, this.randomSize[i])
+      this.circle(this.pos[i].x, this.pos[i].y - 3, this.randomSize[i])
+      this.circle(this.pos[i].x - 3, this.pos[i].y, this.randomSize[i])
 
       // this.imageMode(this.CENTER)
       // this.image(imagesBubble[counter - 1], this.pos[i].x, this.pos[i].y, this.randomSize[i], this.randomSize[i])
