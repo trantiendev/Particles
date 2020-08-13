@@ -27,6 +27,7 @@ export default class Particles extends p5 {
     canvas.style('z-index', '-1')
     this.pos = []
     this.vel = []
+    this.opacities = []
     this.randomSize = []
     // this.blendMode(this.BLEND)
 
@@ -39,14 +40,16 @@ export default class Particles extends p5 {
     setInterval(() => {
       if (this.particlesLength == MAX_SIZE) this.toggleRotation = false
       if (this.particlesLength == MIN_SIZE) this.toggleRotation = true
-      this.toggleRotation ? this.addParticle() : this.removeParticle()
-    }, 1000)
+      // this.toggleRotation ? this.addParticle() : this.removeParticle()
+      if (this.toggleRotation) this.addParticle()
+    }, 2000)
   }
 
   addParticle() {
     this.particlesLength++
     this.pos.push(this.createVector(this.random(this.width), this.random(this.height)))
     this.vel.push(this.createVector(this.random(-1,1), this.random(-1,1)))
+    this.opacities.push(0)
     this.randomSize.push(this.random(50, 120))
     this.randomImg = Math.floor(this.random(1, 7))
     particlesPosition.push(this.pos[this.pos.length - 1])
@@ -56,6 +59,7 @@ export default class Particles extends p5 {
     this.particlesLength--
     this.pos.pop()
     this.vel.pop()
+    this.opacities.pop()
     this.randomSize.pop()
     particlesPosition.pop()
   }
@@ -88,7 +92,6 @@ export default class Particles extends p5 {
   render() {
     this.clear()
     // let counter = 0
-    this.fill('rgba(25, 181, 254, .3)')
     this.background('rgba(0, 0, 0, 1)')
 
     for(let i = 0; i < this.particlesLength; i++) {
@@ -98,10 +101,19 @@ export default class Particles extends p5 {
       let circleSize = this.map(this.cos(this.frameCount * sizeSpeed), -1, 1, scaleMin, scaleMax)
       // counter++
       // if (counter > imagesBubble.length) counter = 1
-
+      if (this.opacities[i] < 90 && this.toggleRotation) {
+        this.opacities[i] += 0.5
+        this.fill(this.color(25, 181, 254, this.opacities[i]))
+      } else if (!this.toggleRotation && i + 1 == this.particlesLength) {
+        this.opacities[i] -= 0.5
+        this.fill(this.color(25, 181, 254, this.opacities[i]))
+      } else {
+        this.fill(this.color(25, 181, 254, 90))
+      }
       this.update(this.pos[i], this.vel[i])
-      this.connectParticles(this.pos[i], particlesPosition.slice(i + 1))
+      this.connectParticles(this.pos[i], particlesPosition.slice(i + 1), this.opacities[i])
       this.drawingCircles(this.pos[i].x, this.pos[i].y, circleSize)
+      if (this.opacities[i] == 0) this.removeParticle()
 
       // this.imageMode(this.CENTER)
       // this.image(imagesBubble[counter - 1], this.pos[i].x, this.pos[i].y, this.randomSize[i], this.randomSize[i])
@@ -130,12 +142,12 @@ export default class Particles extends p5 {
     if(postition.y < 0 || postition.y > document.body.offsetHeight) velocity.y *= -1
   }
 
-  connectParticles(position, particles) {
+  connectParticles(position, particles, opacity) {
     particles.forEach(particle => {
       const distance = this.dist(position.x, position.y, particle.x,particle.y)
 
       if (distance < 200) {
-        this.stroke('rgba(255, 255, 255, 0.9)')
+        this.stroke(this.color(255, 255, 255, opacity + 100))
         this.line(position.x, position.y, particle.x,particle.y)
       }
     })
