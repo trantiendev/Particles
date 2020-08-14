@@ -128,6 +128,7 @@ export default class Particles extends p5 {
       this.fill(this.color(this.colorsParticle[counter - 1].replace('opacity', `${opacity[index]}`)))
     } else if (!this.toggleRotation && index + 1 == this.particlesLength) {
       opacity[index] -= 0.002
+      if (opacity[index] < 0) opacity[index] = 0
       this.fill(this.color(this.colorsParticle[counter - 1].replace('opacity', `${opacity[index]}`)))
     } else {
       this.fill(this.colorsParticle[counter - 1].replace('opacity', '0.3'))
