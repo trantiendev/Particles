@@ -60,7 +60,6 @@ export default class Particles extends p5 {
     this.vel.push(this.createVector(this.random(-1,1), this.random(-1,1)))
     this.opacities.push(0)
     this.randomSize.push(this.random(50, 120))
-    this.randomImg = Math.floor(this.random(1, 7))
     particlesPosition.push(this.pos[this.pos.length - 1])
   }
 
@@ -94,7 +93,7 @@ export default class Particles extends p5 {
   prepareGradient() {
 		// this.drawingContext.shadowOffsetX = this.random(1)
 	  // this.drawingContext.shadowOffsetY = this.random(1)
-	  // this.drawingContext.shadowBlur = 50
+	  // this.drawingContext.shadowBlur = 20
 	  this.drawingContext.shadowColor = 'rgba(25, 181, 254, 1)'
   }
 
@@ -116,14 +115,11 @@ export default class Particles extends p5 {
       this.connectParticles(this.pos[i], particlesPosition.slice(i + 1), this.opacities[i])
       this.drawingCircles(this.pos[i].x, this.pos[i].y, circleSize)
       if (this.opacities[i] == 0) this.removeParticle()
-
-      // this.imageMode(this.CENTER)
-      // this.image(imagesBubble[counter - 1], this.pos[i].x, this.pos[i].y, this.randomSize[i], this.randomSize[i])
     }
   }
 
   fadedAnimation(opacity, counter, index) {
-    if (opacity[index] < 0.3 && this.toggleRotation) {
+    if (opacity[index] < 0.7 && this.toggleRotation) {
       opacity[index] += 0.002
       this.fill(this.color(this.colorsParticle[counter - 1].replace('opacity', `${opacity[index]}`)))
     } else if (!this.toggleRotation && index + 1 == this.particlesLength) {
@@ -131,7 +127,7 @@ export default class Particles extends p5 {
       if (opacity[index] < 0) opacity[index] = 0
       this.fill(this.color(this.colorsParticle[counter - 1].replace('opacity', `${opacity[index]}`)))
     } else {
-      this.fill(this.colorsParticle[counter - 1].replace('opacity', '0.3'))
+      this.fill(this.colorsParticle[counter - 1].replace('opacity', '0.7'))
     }
   }
 
@@ -140,19 +136,14 @@ export default class Particles extends p5 {
     this.prepareGradient()
 
     this.circle(circleX, circleY, circleSize)
-    this.circle(circleX + 3, circleY + 3, circleSize)
-    this.circle(circleX - 3, circleY - 3, circleSize)
-    this.circle(circleX, circleY - 3, circleSize)
-    this.circle(circleX - 3, circleY, circleSize)
-    this.circle(circleX - 3, circleY, circleSize * 1.1)
+    this.circle(circleX + 4, circleY + 4, circleSize)
+    this.circle(circleX - 4, circleY - 4, circleSize)
+    this.circle(circleX, circleY - 4, circleSize)
+    this.circle(circleX - 4, circleY, circleSize)
+    this.circle(circleX - 4, circleY, circleSize * 1.1)
     this.circle(circleX, circleY - 6, circleSize * 1.1)
+    this.circle(circleX, circleY - 6, circleSize * 1.25)
   }
-
-  // preload() {
-  //   for (let i = 0; i < 7; i++) {
-  //     imagesBubble[i] = this.loadImage(`images/${i + 1}.png`)
-  //   }
-  // }
 
   edges(postition, velocity) {
     if(postition.x < 0 || postition.x > this.windowWidth) velocity.x *= -1
