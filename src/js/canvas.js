@@ -4,7 +4,6 @@ import p5 from 'p5'
 const MAX_SIZE = 15
 const MIN_SIZE = 10
 let particlesPosition = []
-let imagesBubble = []
 let sizeSpeed = .01
 
 export default class Particles extends p5 {
@@ -99,14 +98,19 @@ export default class Particles extends p5 {
 
   render() {
     this.clear()
-    let counter = 0
     this.background('rgba(0, 0, 0, 1)')
 
+    let counter = 0
+    let scaleMin = null
+    let scaleMax = null
+
     for(let i = 0; i < this.particlesLength; i++) {
-      let scaleMin = this.randomSize[i]
-      let scaleMax = this.randomSize[i] * 1.5
+      scaleMin = this.randomSize[i]
+      scaleMax = this.randomSize[i] * 1.5
+
       // Random scale size circles
       let circleSize = this.map(this.cos(this.frameCount * sizeSpeed), -1, 1, scaleMin, scaleMax)
+
       counter++
       if (counter > this.colorsParticle.length) counter = 1
 
@@ -119,7 +123,7 @@ export default class Particles extends p5 {
   }
 
   fadedAnimation(opacity, counter, index) {
-    if (opacity[index] < 0.7 && this.toggleRotation) {
+    if (opacity[index] < 0.5 && this.toggleRotation) {
       opacity[index] += 0.002
       this.fill(this.color(this.colorsParticle[counter - 1].replace('opacity', `${opacity[index]}`)))
     } else if (!this.toggleRotation && index + 1 == this.particlesLength) {
@@ -127,7 +131,7 @@ export default class Particles extends p5 {
       if (opacity[index] < 0) opacity[index] = 0
       this.fill(this.color(this.colorsParticle[counter - 1].replace('opacity', `${opacity[index]}`)))
     } else {
-      this.fill(this.colorsParticle[counter - 1].replace('opacity', '0.7'))
+      this.fill(this.colorsParticle[counter - 1].replace('opacity', '0.5'))
     }
   }
 
@@ -135,6 +139,7 @@ export default class Particles extends p5 {
     this.noStroke()
     this.prepareGradient()
 
+    this.circle(circleX, circleY - 6, circleSize * 1.25)
     this.circle(circleX, circleY, circleSize)
     this.circle(circleX + 4, circleY + 4, circleSize)
     this.circle(circleX - 4, circleY - 4, circleSize)
@@ -142,7 +147,6 @@ export default class Particles extends p5 {
     this.circle(circleX - 4, circleY, circleSize)
     this.circle(circleX - 4, circleY, circleSize * 1.1)
     this.circle(circleX, circleY - 6, circleSize * 1.1)
-    this.circle(circleX, circleY - 6, circleSize * 1.25)
   }
 
   edges(postition, velocity) {
