@@ -1,0 +1,58 @@
+main {
+  overflow: hidden;
+}
+
+.section {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  background-attachment: fixed;
+
+  h1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 80px;
+    overflow: hidden;
+    line-height: 1;
+
+    span {
+      letter-spacing: 3px;
+      font-weight: 300;
+      display: inline-block;
+      text-transform: uppercase;
+			animation: .2s 1 ease-out forwards;
+      transform: translate3d(-30%, -100%, 0);
+      animation-name: rampUp;
+    }
+
+    // @for $i from 1 through [data-text] {
+    //   span:nth-child(#{$i}) {
+    //     animation-delay: $i * .2s;
+    //   }
+    // }
+  }
+
+  // &--red {
+  //   background: rgba(red, $alpha: 0.1);
+  // }
+
+  // &--yellow {
+  //   background: rgba(yellow, $alpha: 0.1);
+  // }
+
+  // &--blue {
+  //   background: rgba(blue, $alpha: 0.1);
+  // }
+}
+
+@keyframes rampUp {
+  0% {
+    transform: translate3d(-30%, 100%, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
