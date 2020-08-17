@@ -123,7 +123,7 @@ export default class Particles extends p5 {
   }
 
   fadedAnimation(opacity, counter, index) {
-    if (opacity[index] < 0.5 && this.toggleRotation) {
+    if (opacity[index] < 0.3 && this.toggleRotation) {
       opacity[index] += 0.002
       this.fill(this.color(this.colorsParticle[counter - 1].replace('opacity', `${opacity[index]}`)))
     } else if (!this.toggleRotation && index + 1 == this.particlesLength) {
@@ -131,7 +131,7 @@ export default class Particles extends p5 {
       if (opacity[index] < 0) opacity[index] = 0
       this.fill(this.color(this.colorsParticle[counter - 1].replace('opacity', `${opacity[index]}`)))
     } else {
-      this.fill(this.colorsParticle[counter - 1].replace('opacity', '0.5'))
+      this.fill(this.colorsParticle[counter - 1].replace('opacity', '0.3'))
     }
   }
 
@@ -141,11 +141,10 @@ export default class Particles extends p5 {
 
     this.circle(circleX, circleY - 6, circleSize * 1.25)
     this.circle(circleX, circleY, circleSize)
-    this.circle(circleX + 4, circleY + 4, circleSize)
-    this.circle(circleX - 4, circleY - 4, circleSize)
-    this.circle(circleX, circleY - 4, circleSize)
-    this.circle(circleX - 4, circleY, circleSize)
-    this.circle(circleX - 4, circleY, circleSize * 1.1)
+    this.circle(circleX + 5, circleY + 4, circleSize)
+    this.circle(circleX - 4, circleY - 4, circleSize * 0.7)
+    this.circle(circleX - 4, circleY, circleSize * 0.8)
+    this.circle(circleX - 4, circleY - 4, circleSize * 0.9)
     this.circle(circleX, circleY - 6, circleSize * 1.1)
   }
 
