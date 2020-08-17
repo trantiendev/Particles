@@ -27,7 +27,6 @@ export default class Particles extends p5 {
       'rgba(156, 242, 215, opacity)',
       'rgba(160, 213, 252, opacity)',
       'rgba(183, 164, 253, opacity)',
-      'rgba(237, 237, 237, opacity)'
     ]
   }
 
