@@ -80,7 +80,9 @@ export default class Particles extends p5 {
   }
 
   draw() {
-    this.background('rgba(0, 0, 0, 1)')
+    // this.background('rgba(0, 0, 0, 1)')
+    this.background('rgba(255, 255, 255, 1)')
+
     this.render()
     // let fps = this.frameRate()
     // this.fill(255)
@@ -97,7 +99,9 @@ export default class Particles extends p5 {
 
   render() {
     this.clear()
-    this.background('rgba(0, 0, 0, 1)')
+    this.background('rgba(255, 255, 255, 1)')
+    // this.background('rgba(0, 0, 0, 1)')
+    // this.blendMode(this.LIGHTEST)
 
     let counter = 0
     let scaleMin = null
@@ -122,7 +126,9 @@ export default class Particles extends p5 {
   }
 
   fadedAnimation(opacity, counter, index) {
-    if (opacity[index] < 0.3 && this.toggleRotation) {
+    const maxOpacity = 0.3
+
+    if (opacity[index] < maxOpacity && this.toggleRotation) {
       opacity[index] += 0.002
       this.fill(this.color(this.colorsParticle[counter - 1].replace('opacity', `${opacity[index]}`)))
     } else if (!this.toggleRotation && index + 1 == this.particlesLength) {
@@ -130,21 +136,30 @@ export default class Particles extends p5 {
       if (opacity[index] < 0) opacity[index] = 0
       this.fill(this.color(this.colorsParticle[counter - 1].replace('opacity', `${opacity[index]}`)))
     } else {
-      this.fill(this.colorsParticle[counter - 1].replace('opacity', '0.3'))
+      this.fill(this.colorsParticle[counter - 1].replace('opacity', `${maxOpacity}`))
     }
   }
 
   drawingCircles(circleX, circleY, circleSize) {
     this.noStroke()
     this.prepareGradient()
+    this.ellipseMode(this.CENTER)
+    this.blendMode(this.DARKEST)
 
-    this.circle(circleX, circleY - 6, circleSize * 1.25)
-    this.circle(circleX, circleY, circleSize)
-    this.circle(circleX + 5, circleY + 4, circleSize)
-    this.circle(circleX - 4, circleY - 4, circleSize * 0.7)
-    this.circle(circleX - 4, circleY, circleSize * 0.8)
-    this.circle(circleX - 4, circleY - 4, circleSize * 0.9)
-    this.circle(circleX, circleY - 6, circleSize * 1.1)
+    this.push()
+    this.translate(circleX,circleY)
+    this.rotate(this.frameCount / 40.0)
+    this.translate(-circleX, -circleY)
+
+    this.ellipse(circleX, circleY - 4, circleSize * 1.3)
+    this.ellipse(circleX, circleY - 2, circleSize * 1.1)
+    this.ellipse(circleX, circleY, circleSize)
+    this.ellipse(circleX + 5, circleY + 4, circleSize)
+    this.ellipse(circleX - 4, circleY - 4, circleSize * 0.7)
+    this.ellipse(circleX + 4, circleY + 4, circleSize * 0.8)
+    this.ellipse(circleX - 4, circleY, circleSize * 0.8)
+    this.ellipse(circleX - 4, circleY + 4, circleSize * 0.9)
+    this.pop()
   }
 
   edges(postition, velocity) {
@@ -157,7 +172,7 @@ export default class Particles extends p5 {
       const distance = this.dist(position.x, position.y, particle.x,particle.y)
 
       if (distance < 280) {
-        this.stroke(this.color(255, 255, 255, opacity + 100))
+        this.stroke(this.color(150, 150, 150, opacity + 100))
         this.line(position.x, position.y, particle.x,particle.y)
       }
     })
